@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive // Molizzka — Character Card</title>
+    <!-- Ikona karty w przeglądarce -->
+    <link rel="icon" type="image/png" href="icon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Pirata+One&family=UnifrakturMaguntia&display=swap');
+
+        :root {
+            /* Nowa paleta kolorów z obrazka (Lekko rozjaśniona) */
+            --bg-dark: #080E11;        /* Kompromis: głęboka czerń, ale nieco jaśniejsza */
+            --bg-panel: #111A1F;       /* Ciemny Dark Jungle Green, poprawiający czytelność ramek */
+            --border-dark: #3A3534;    /* Jet */
+            --gold-dim: #724B39;       /* Coffee */
+            --gold-bright: #CF9D7B;    /* Antique Brass */
+            
+            /* Motywy kolorystyczne dla poszczególnych sekcji */
+            --theme-1: #CF9D7B; /* Dossier: Antique Brass */
+            --theme-2: #598c96; /* Mastery: Mystic Teal */
+            --theme-3: #886b8f; /* Journey: Muted Amethyst */
+            --theme-4: #a84545; /* Adversity: Muted Crimson */
+            --theme-5: #8a9e9f; /* Destiny: Astral Silver */
+            
+            /* Zastąpienie dawnych zmiennych nową paletą */
+            --fire-core: #CF9D7B;      
+            --text-main: #e6dacd;      /* Lekko ocieplony, jasny kolor dla czytelności */
+            --text-muted: #968a80;     /* Ocieplony szary do opisów */
+            
+            /* Role czcionek */
+            --font-title: 'UnifrakturMaguntia', cursive;   
+            --font-head: 'Pirata One', cursive;            
+            --font-note: 'Cormorant Garamond', serif;      
+            --font-body: 'Cormorant Garamond', serif;      
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 1.3rem; 
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, var(--bg-panel) 0%, var(--bg-dark) 100%);
+        }
+
+        /* --- BACKGROUND IMAGE LAYER --- */
+        .fixed-bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('tlo.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.05; /* 5% widoczności */
+            z-index: -10;  /* Za wszystkimi innymi warstwami */
+            pointer-events: none;
+        }
+
+        /* --- SYSTEM JĘZYKOWY --- */
+        body.lang-en .lang-pl { display: none !important; }
+        body.lang-pl .lang-en { display: none !important; }
+
+        /* --- FIRE GLOW (ANIMATED BOTTOM GRADIENT) --- */
+        .fire-glow {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 25vh;
+            background: radial-gradient(ellipse at 50% 120%, rgba(207, 157, 123, 0.15) 0%, rgba(114, 75, 57, 0.15) 50%, transparent 80%);
+            z-index: -3;
+            pointer-events: none;
+            animation: fire-flicker 8s infinite linear;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes fire-flicker {
+            0%, 25%, 60%, 100% { opacity: 0; transform: scaleY(0.8); }
+            10% { opacity: 0.2; transform: scaleY(1); }
+            45% { opacity: 0.35; transform: scaleY(1.2); }
+            80% { opacity: 0.15; transform: scaleY(1.1); }
+        }
+
+        /* --- MAGIC EMBERS --- */
+        .embers-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2; pointer-events: none; overflow: hidden;
+        }
+        .ember {
+            position: absolute; border-radius: 50%; background: var(--gold-bright);
+            box-shadow: 0 0 10px var(--fire-core);
+            opacity: 0; animation: float-up linear infinite;
+        }
+        @keyframes float-up {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.7; }
+            80% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* Gigantyczny tekst w tle */
+        .bg-typography {
+            position: fixed;
+            top: 10%;
+            left: -15vw;
+            font-family: var(--font-title);
+            font-size: 35vw;
+            color: rgba(207, 157, 123, 0.02); /* Antique Brass opacity */
+            font-weight: normal;
+            transform: rotate(-90deg);
+            z-index: -5;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr 200px;
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        /* --- LEFT COLUMN: TAROT INTRO --- */
+        .col-left {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .sticky-tarot {
+            position: sticky;
+            top: 40px;
+        }
+
+        .tarot-card {
+            width: 280px;
+            height: 460px;
+            background: var(--bg-dark); 
+            border: 1px solid var(--gold-dim);
+            padding: 8px;
+            position: relative;
+            box-shadow: 10px 15px 30px rgba(12, 21, 25, 0.95), 0 0 15px rgba(207, 157, 123, 0.05);
+            transition: transform 0.4s ease;
+            z-index: 10;
+        }
+        .tarot-card:hover { 
+            border-color: var(--gold-bright); 
+            box-shadow: 10px 15px 30px rgba(12, 21, 25, 0.95), 0 0 25px rgba(207, 157, 123, 0.2); 
+            transform: translateY(-5px);
+        }
+        
+        /* Zewnętrzna, cienka linia konturowa */
+        .tarot-card::before {
+            content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 1px solid rgba(114, 75, 57, 0.4); z-index: 1; pointer-events: none;
+            transition: border-color 0.4s ease;
+        }
+        .tarot-card:hover::before { border-color: rgba(207, 157, 123, 0.6); }
+
+        .tarot-inner {
+            border: 1px solid var(--gold-bright); 
+            height: 100%; display: flex; flex-direction: column; align-items: center; padding: 15px; position: relative;
+            z-index: 2;
+            /* Promieniste, astralne tło (Sunburst) dopasowane do nowej palety */
+            background: 
+                radial-gradient(circle, transparent 30%, var(--bg-dark) 90%),
+                repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 12deg, rgba(207, 157, 123, 0.05) 13deg, transparent 14deg);
+        }
+
+        /* --- Narożniki Kreskowe --- */
+        .tarot-corner {
+            position: absolute;
+            width: 15px; height: 15px;
+            border: 2px solid var(--gold-bright);
+        }
+        /* Wewnętrzne kropki w narożnikach */
+        .tarot-corner::after {
+            content: ''; position: absolute; width: 4px; height: 4px; background: var(--gold-bright); border-radius: 50%;
+        }
+        
+        .tc-tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .tc-tl::after { top: 2px; left: 2px; }
+
+        .tc-tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+        .tc-tr::after { top: 2px; right: 2px; }
+
+        .tc-bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+        .tc-bl::after { bottom: 2px; left: 2px; }
+
+        .tc-br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+        .tc-br::after { bottom: 2px; right: 2px; }
+
+        /* --- Typografia Karty --- */
+        .tarot-number { 
+            font-family: var(--font-head); color: var(--gold-bright); font-size: 2.2rem; margin-bottom: 10px; 
+            display: flex; align-items: center; gap: 10px; line-height: 1;
+        }
+        .tarot-number::before, .tarot-number::after { content: '✧'; font-size: 1.2rem; color: var(--gold-dim); font-family: sans-serif; }
+        
+        .tarot-card img { width: 100%; height: 260px; object-fit: cover; border: 1px solid var(--gold-dim); filter: grayscale(40%) contrast(130%) sepia(20%); margin-bottom: 5px; position: relative; z-index: 5; }
+        
+        /* Ornament pod zdjęciem */
+        .tarot-divider {
+            color: var(--gold-dim); font-size: 1.3rem; margin: auto 0 5px 0;
+            display: flex; align-items: center; justify-content: center; width: 100%;
+            letter-spacing: 4px; z-index: 5; text-shadow: 0 0 5px rgba(12, 21, 25, 0.9);
+        }
+        .tarot-divider::before, .tarot-divider::after {
+            content: ''; flex: 1; height: 1px; background: var(--gold-dim); margin: 0 10px;
+        }
+
+        /* Astralne iskry w tle karty */
+        .tarot-sparkles {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4;
+        }
+        .tarot-sparkles::before, .tarot-sparkles::after {
+            content: '✦'; position: absolute; color: var(--theme-2); font-size: 1rem; text-shadow: 0 0 5px var(--theme-2);
+        }
+        .tarot-sparkles::before { top: 22%; left: 8%; }
+        .tarot-sparkles::after { top: 72%; right: 8%; font-size: 0.8rem; }
+
+        .tarot-name { font-family: var(--font-head); color: var(--text-main); font-size: 1.4rem; letter-spacing: 3px; text-align: center; text-transform: uppercase; z-index: 5; }
+
+        .site-title {
+            margin-top: 40px;
+            font-family: var(--font-title);
+            color: var(--gold-bright);
+            font-size: 4rem;
+            line-height: 0.9;
+            text-align: right;
+            width: 100%;
+            text-shadow: 0 0 15px rgba(207, 157, 123, 0.2);
+        }
+        .site-title span { display: block; font-size: 1.2rem; color: var(--text-muted); font-family: var(--font-note); margin-top: 10px; line-height: 1; font-style: normal; }
+
+        /* Krótki opis postaci w lewej kolumnie */
+        .char-desc {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px dashed rgba(114, 75, 57, 0.5); /* Coffee opacity */
+            font-family: var(--font-note);
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            text-align: right;
+            line-height: 1.4;
+            width: 100%;
+            max-width: 280px; /* Dopasowanie szerokości do karty Tarota */
+        }
+
+        /* Stylizacja Portalu (Linktree) */
+        .portal-container {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+        .portal-link {
+            text-decoration: none;
+            color: var(--gold-bright);
+            font-family: var(--font-head);
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            padding: 8px 15px;
+            border: 1px solid var(--gold-dim);
+            background: rgba(114, 75, 57, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .portal-link::before {
+            content: '✧';
+            margin-right: 10px;
+            font-family: sans-serif;
+            color: var(--gold-dim);
+        }
+        .portal-link:hover {
+            background: rgba(207, 157, 123, 0.15);
+            border-color: var(--gold-bright);
+            transform: translateX(-5px);
+            box-shadow: -5px 0 15px rgba(207, 157, 123, 0.1);
+        }
+
+        /* --- MIDDLE COLUMN: CONTENT --- */
+        .col-main {
+            border-left: 2px solid var(--gold-dim);
+            padding-left: 40px;
+            position: relative;
+        }
+
+        /* --- SYSTEM MOTYWÓW SEKCJI --- */
+        .info-block {
+            /* Domyślny akcent w razie braku przypisanej klasy motywu */
+            --accent: var(--gold-bright);
+            
+            margin-bottom: 40px;
+            position: relative;
+            background: rgba(22, 33, 39, 0.6); /* Dark Jungle Green z przezroczystością */
+            padding: 20px;
+            border: 1px solid rgba(114, 75, 57, 0.3); /* Coffee */
+            box-shadow: inset 0 0 20px rgba(12, 21, 25, 0.8); /* Chinese Black */
+        }
+
+        .theme-1 { --accent: var(--theme-1); }
+        .theme-2 { --accent: var(--theme-2); }
+        .theme-3 { --accent: var(--theme-3); }
+        .theme-4 { --accent: var(--theme-4); }
+        .theme-5 { --accent: var(--theme-5); }
+
+        .chapter-subtitle {
+            font-family: var(--font-head);
+            font-size: 1.5rem;
+            color: var(--accent); /* Zastosowanie motywu */
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            display: block;
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-head); font-weight: normal; color: var(--gold-bright); letter-spacing: 1px;
+        }
+
+        /* --- NAGŁÓWKI SEKCJI I SEPARATORY --- */
+        h2 {
+            font-size: 2.5rem;
+            padding-bottom: 15px; 
+            margin-bottom: 35px; 
+            margin-top: 50px;
+            position: relative;
+        }
+        h2:first-of-type { margin-top: 0; }
+
+        /* Astralne symbole na początku linii w kolorze motywu */
+        h2::before {
+            content: '☾ ✦';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.1rem;
+            letter-spacing: 5px;
+        }
+
+        /* Fading linia horyzontalna w kolorze motywu */
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 6px; 
+            left: 55px; 
+            width: calc(100% - 60px);
+            height: 1px;
+            background: linear-gradient(to right, var(--accent) 0%, var(--accent) 20%, transparent 100%);
+            opacity: 0.6;
+        }
+
+        /* Subtelne dekoracje rogów ramek w kolorze motywu */
+        .info-block::before, .info-block::after {
+            content: ''; position: absolute; width: 12px; height: 12px;
+            border: 1px solid var(--accent); opacity: 0.4; pointer-events: none;
+        }
+        .info-block::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .info-block::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+        
+        ul.profile-list { list-style-type: none; margin-bottom: 20px;}
+        ul.profile-list > li { margin-bottom: 15px; position: relative; padding-left: 20px; border-left: 2px solid transparent; transition: 0.3s;}
+        ul.profile-list > li:hover { 
+            border-left: 2px solid var(--accent); 
+            background: color-mix(in srgb, var(--accent) 8%, transparent); 
+        }
+        ul.profile-list > li::before { content: "✧"; position: absolute; left: 0; color: var(--accent); font-size: 1.2rem; top: 2px; font-family: sans-serif;}
+        
+        ul.profile-list ul { margin-top: 8px; padding-left: 25px; list-style-type: none; }
+        ul.profile-list ul li { position: relative; padding-left: 15px; margin-bottom: 5px; color: var(--text-muted); font-size: 1.2rem; }
+        ul.profile-list ul li::before { content: "•"; position: absolute; left: 0; color: var(--accent); opacity: 0.7; font-family: sans-serif;}
+
+        /* Pogrubienia przyjmują kolor danej sekcji */
+        .info-block strong { color: var(--accent); font-family: var(--font-head); letter-spacing: 1px; font-size: 1.5rem; font-weight: normal; }
+        
+        .prof-desc { font-family: var(--font-note); font-size: 1.2rem; color: var(--text-muted); margin-top: 4px; padding-left: 10px; line-height: 1.4; font-style: normal; }
+
+        .magic-redacted { 
+            color: var(--gold-dim); 
+            font-family: var(--font-head); 
+            letter-spacing: 2px; 
+            user-select: none; 
+            transition: 0.3s;
+            cursor: help;
+        }
+        .magic-redacted:hover {
+            color: var(--accent);
+            text-shadow: 0 0 5px var(--accent);
+        }
+
+        /* --- SKILL TREE --- */
+        .skill-tree { list-style-type: none; }
+        .skill-tree ul { list-style-type: none; padding-left: 20px; border-left: 1px solid var(--gold-dim); margin-left: 15px; }
+        .skill-tree li { position: relative; margin-top: 20px; }
+        .skill-tree li::before { content: ''; position: absolute; top: 18px; left: -20px; width: 20px; border-top: 1px solid var(--gold-dim); }
+        
+        .st-node {
+            display: inline-flex; align-items: center; flex-wrap: wrap; background: var(--bg-dark); border: 1px solid var(--gold-dim);
+            padding: 8px 15px; cursor: pointer; user-select: none; transition: all 0.3s; position: relative; z-index: 2; 
+            font-family: var(--font-head); font-size: 1.5rem; letter-spacing: 1px;
+        }
+        .st-node:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: var(--accent); }
+        .st-node.locked { border-style: dashed; border-color: var(--border-dark); color: var(--text-muted); cursor: not-allowed; background: transparent; }
+        .st-node.locked:hover { border-color: var(--border-dark); background: transparent;}
+        
+        .st-icon { font-size: 1.2rem; margin-right: 10px; color: var(--accent); font-family: sans-serif;}
+        .locked .st-icon { color: var(--border-dark); }
+        .st-level { margin-left: 10px; font-size: 0.9rem; color: var(--accent); font-family: var(--font-body); font-weight: bold;}
+        .locked .st-level { color: var(--border-dark); }
+
+        .st-details {
+            display: none; margin-top: 10px; padding: 15px; background: rgba(22, 33, 39, 0.4); border-left: 3px solid var(--accent);
+            font-family: var(--font-note); font-size: 1.2rem; line-height: 1.4; color: var(--text-muted); border-bottom: 1px solid var(--bg-dark); font-style: normal;
+        }
+        .st-details.open { display: block; animation: fade-in 0.4s ease; }
+        @keyframes fade-in { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- QUEST LOG --- */
+        .accordion-item { border-bottom: 1px dotted var(--gold-dim); margin-bottom: 15px; padding-bottom: 5px; position: relative; z-index: 2;}
+        .accordion-header {
+            padding: 10px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;
+            font-family: var(--font-head); font-size: 1.8rem; color: var(--text-main); transition: 0.3s; letter-spacing: 1px;
+        }
+        .accordion-header:hover { color: var(--accent); padding-left: 10px; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .accordion-content p { font-family: var(--font-note); font-size: 1.2rem; line-height: 1.4; padding: 15px 10px; color: var(--text-muted); background: rgba(22, 33, 39, 0.4); margin-top: 5px; border-left: 2px solid var(--accent); font-style: normal; }
+        .accordion-item.active .accordion-content { max-height: 400px; }
+        .icon { font-family: sans-serif; color: var(--accent); font-size: 1.2rem; transition: transform 0.3s; font-weight: normal;}
+        .accordion-item.active .icon { transform: rotate(45deg); color: var(--accent); }
+
+        /* Poprawka czytelności cyfr w pseudonimach i kronikach */
+        #aliases-list li, .lining-nums {
+            font-variant-numeric: lining-nums;
+        }
+
+        /* --- RIGHT COLUMN: NAV & BACKGROUND TEXT --- */
+        .col-right {
+            border-left: 1px dotted var(--gold-dim);
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 40px;
+        }
+
+        .y2k-nav {
+            list-style-type: none;
+        }
+
+        .nav-item {
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .nav-header {
+            font-family: var(--font-head);
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-header::before {
+            content: '❖'; margin-right: 15px; font-size: 1rem; color: var(--gold-dim); transition: 0.4s; font-family: sans-serif; display: inline-block;
+        }
+
+        .nav-header:hover {
+            color: var(--gold-bright);
+            transform: translateX(-5px);
+        }
+        .nav-header:hover::before { color: var(--gold-bright); }
+
+        .nav-item.active .nav-header { color: var(--gold-bright); }
+        .nav-item.active .nav-header::before { color: var(--gold-bright); transform: rotate(90deg); }
+
+        .nav-body {
+            font-family: var(--font-note);
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            padding-left: 25px;
+            line-height: 1.3;
+            border-left: 1px dashed rgba(114, 75, 57, 0.5); /* Coffee opacity */
+            margin-left: 6px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, margin-top 0.4s ease;
+        }
+
+        .nav-item.active .nav-body {
+            max-height: 300px;
+            margin-top: 10px;
+        }
+
+        /* Gigantyczny napis z prawej strony tła */
+        .giant-vertical-text {
+            position: fixed;
+            top: 5%;
+            right: -8vw;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-family: var(--font-title);
+            color: rgba(207, 157, 123, 0.05); /* Antique Brass opacity */
+            font-size: 35vh;
+            z-index: -4;
+            user-select: none;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* --- RESPONSIVE & BUTTONS --- */
+        @media (max-width: 1000px) {
+            .grid-layout { grid-template-columns: 1fr; gap: 60px; }
+            .col-main { border-left: none; padding-left: 0; }
+            .col-right { border-left: none; padding-left: 0; border-top: 1px dotted var(--gold-dim); padding-top: 40px; }
+            .sticky-tarot { position: relative; top: 0; }
+            .giant-vertical-text { display: none; }
+            .site-title { text-align: center; }
+            .audio-controls-wrapper { right: 10px !important; bottom: 10px !important; }
+            .lang-toggle-btn { right: 10px !important; bottom: 90px !important; }
+        }
+
+        .control-btn {
+            background: var(--bg-panel); color: var(--gold-bright);
+            border: 1px solid var(--gold-dim); padding: 12px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: all 0.3s; font-family: var(--font-head); font-size: 1rem;
+        }
+        .control-btn:hover { background: var(--gold-dim); color: var(--bg-dark); }
+        .control-btn svg { margin-left: 10px; }
+        
+        .lang-toggle-btn { position: fixed; right: 30px; bottom: 90px; z-index: 1001; letter-spacing: 2px; }
+
+        /* --- AUDIO UI IMPROVEMENTS --- */
+        .audio-controls-wrapper {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-module {
+            display: flex;
+            align-items: center;
+            background: var(--bg-panel);
+            border: 1px solid var(--gold-dim);
+            height: 48px;
+            border-radius: 4px;
+            padding: 0 10px;
+            transition: width 0.4s ease, padding 0.4s ease;
+            width: 48px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .volume-module:hover {
+            width: 180px;
+        }
+
+        .volume-icon {
+            min-width: 28px;
+            color: var(--gold-bright);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .volume-slider-container {
+            margin-left: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .volume-module:hover .volume-slider-container {
+            opacity: 1;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100px;
+            background: transparent;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        /* Suwak Track */
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: var(--gold-dim);
+            border-radius: 2px;
+        }
+        /* Suwak Thumb */
+        input[type=range]::-webkit-slider-thumb {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: var(--gold-bright);
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -6px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .music-toggle-btn {
+            height: 48px;
+            min-width: 140px;
+        }
+
+        /* --- CREDITS UI (EXPANDABLE) --- */
+        .credits-wrapper {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: flex-start;
+        }
+
+        .credits-label {
+            font-family: var(--font-head);
+            font-size: 0.9rem;
+            color: var(--gold-dim);
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            padding: 5px 0;
+        }
+        .credits-label:hover {
+            color: var(--gold-bright);
+            text-shadow: 0 0 5px var(--gold-bright);
+        }
+
+        .credits-panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--gold-dim);
+            padding: 15px;
+            width: 280px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            display: none; /* Ukryty domyślnie */
+            animation: slideUp 0.3s ease;
+        }
+
+        .credits-panel.open {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .credit-item {
+            margin-bottom: 12px;
+            border-bottom: 1px dashed rgba(114, 75, 57, 0.3);
+            padding-bottom: 8px;
+        }
+        .credit-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .credit-title {
+            font-family: var(--font-head);
+            font-size: 0.9rem;
+            color: var(--gold-bright);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .credit-desc {
+            font-family: var(--font-note);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: block;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+
+        .credit-link {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            color: var(--gold-dim);
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .credit-link:hover {
+            color: var(--text-main);
+        }
+
+    </style>
+</head>
+<body class="lang-en">
+
+    <!-- Warstwa tła z obrazem -->
+    <div class="fixed-bg-image"></div>
+
+    <div class="fire-glow"></div>
+    <div class="bg-typography">Artificer</div>
+    <div class="giant-vertical-text">Grimoire</div>
+    <div class="embers-container" id="embers-container"></div>
+
+    <audio id="bgMusic" loop autoplay>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="grid-layout">
+        
+        <!-- LEFT COLUMN: TAROT & TITLE -->
+        <div class="col-left">
+            <div class="sticky-tarot">
+                <div class="tarot-card">
+                    <div class="tarot-inner">
+                        <!-- Geometria narożników -->
+                        <div class="tarot-corner tc-tl"></div>
+                        <div class="tarot-corner tc-tr"></div>
+                        <div class="tarot-corner tc-bl"></div>
+                        <div class="tarot-corner tc-br"></div>
+                        
+                        <div class="tarot-number">I</div>
+                        <img src="profp.gif" alt="Avatar Asset" onerror="this.src='https://via.placeholder.com/280x260?text=Avatar+Asset'">
+                        <div class="tarot-divider">✦</div>
+                        <div class="tarot-name">
+                            <span class="lang-en">The Artificer</span>
+                            <span class="lang-pl">Artificer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="site-title">
+                    Artificer
+                    <span>
+                        <span class="lang-en">Architect of the Digital Void</span>
+                        <span class="lang-pl">Architekt Cyfrowej Pustki</span>
+                    </span>
+                </div>
+                <div class="char-desc">
+                    <span class="lang-en">A rogue operator wandering the boundaries of the digital void. She manipulates residual data to forge artifacts of power, bypassing corporate blockades and weaving chaotic timelines into tangible realities.</span>
+                    <span class="lang-pl">Zbuntowany operator błądzący na krawędziach cyfrowej pustki. Manipuluje szczątkowymi danymi, by tworzyć potężne artefakty, omijając korporacyjne blokady i tkając namacalną rzeczywistość z chaotycznych osi czasu.</span>
+                </div>
+                
+                <!-- PORTAL (LINKTREE) -->
+                <div class="portal-container">
+                    <a href="https://linktr.ee/molizzka" target="_blank" class="portal-link">
+                        <span class="lang-en">ACCESS PORTAL</span>
+                        <span class="lang-pl">DOSTĘP DO PORTALU</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- MIDDLE COLUMN: CONTENT -->
+        <div class="col-main">
+            
+            <div class="info-block theme-1">
+                <span class="chapter-subtitle" style="color: var(--gold-dim);">
+                    <span class="lang-en">Liber I: The Entity</span>
+                    <span class="lang-pl">Liber I: Byt</span>
+                </span>
+                <h2>
+                    <span class="lang-en">Dossier</span>
+                    <span class="lang-pl">Akta</span>
+                </h2>
+                <ul class="profile-list">
+                    <li onclick="const el = document.getElementById('aliases-list'); el.style.display = el.style.display === 'none' ? 'block' : 'none';" style="cursor: pointer; user-select: none;">
+                        <strong>
+                            <span class="lang-en">Name:</span>
+                            <span class="lang-pl">Imię:</span>
+                        </strong> Martyna 
+                        <span style="font-size: 1.4rem; color: var(--gold-dim); float: right; font-family: var(--font-note); letter-spacing: 2px;">
+                            [+]
+                        </span>
+                        <ul id="aliases-list" style="display: none;">
+                            <li>
+                                <span class="lang-en">Aliases:</span>
+                                <span class="lang-pl">Pseudonimy:</span>
+                                molizzka, N1GHTM4R3
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>
+                            <span class="lang-en">Lineage:</span>
+                            <span class="lang-pl">Pochodzenie:</span>
+                        </strong> <span class="magic-redacted">[REDACTED]</span>
+                    </li>
+                    <li>
+                        <strong>
+                            <span class="lang-en">Class:</span>
+                            <span class="lang-pl">Klasa:</span>
+                        </strong> Artificer
+                        <div class="prof-desc">
+                            <span class="lang-en">Logic-driven architecture and systems engineering. Modifier: +5 to analytical precision and problem-solving.</span>
+                            <span class="lang-pl">Architektura oparta na logice i inżynieria systemów. Modyfikator: +5 do precyzji analitycznej i rozwiązywania problemów.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <strong>
+                            <span class="lang-en">Subclass:</span>
+                            <span class="lang-pl">Subklasa:</span>
+                        </strong> Pirate
+                        <div class="prof-desc">
+                            <span class="lang-en">Resourceful navigation through digital grey areas. Modifier: Immunity to conventional limits and corporate blockades.</span>
+                            <span class="lang-pl">Zaradna nawigacja przez cyfrowe szare strefy. Modyfikator: Odporność na konwencjonalne ograniczenia i korporacyjne blokady.</span>
+                        </div>
+                    </li>
+                    <li>
+                        <strong>
+                            <span class="lang-en">Familiars:</span>
+                            <span class="lang-pl">Chowańce:</span>
+                        </strong>
+                        <ul>
+                            <li>Gemini-Main <span class="lang-en">(Core)</span><span class="lang-pl">(Rdzeń)</span></li>
+                            <li>NotebookLM <span class="lang-en">(Support)</span><span class="lang-pl">(Wsparcie)</span></li>
+                            <li>Claude <span class="lang-en">(Logic Support)</span><span class="lang-pl">(Wsparcie Logiczne)</span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="info-block theme-2">
+                <span class="chapter-subtitle">
+                    <span class="lang-en">Liber II: Mastery</span>
+                    <span class="lang-pl">Liber II: Mistrzostwo</span>
+                </span>
+                <h2>
+                    <span class="lang-en">Artes Magicae</span>
+                    <span class="lang-pl">Sztuki Magiczne</span>
+                </h2>
+                <ul class="skill-tree">
+                    <!-- Branch 1 -->
+                    <li>
+                        <div class="st-node" onclick="this.nextElementSibling.classList.toggle('open')">
+                            <span class="st-icon">✧</span>
+                            <span>
+                                <span class="lang-en">Pattern Divination</span>
+                                <span class="lang-pl">Dywincja Wzorców</span>
+                            </span>
+                            <span class="st-level">
+                                <span class="lang-en">Master</span>
+                                <span class="lang-pl">Mistrz</span>
+                            </span>
+                        </div>
+                        <div class="st-details">
+                            <span class="lang-en">Strategic insight: identifying core trends and hidden connections within complex datasets or project structures.</span>
+                            <span class="lang-pl">Strategiczny wgląd: identyfikacja kluczowych trendów i ukrytych powiązań w złożonych zbiorach danych lub strukturach projektowych.</span>
+                        </div>
+                        <ul>
+                            <li>
+                                <div class="st-node" onclick="this.nextElementSibling.classList.toggle('open')">
+                                    <span class="st-icon">⟡</span>
+                                    <span>
+                                        <span class="lang-en">Mind Overload</span>
+                                        <span class="lang-pl">Przeciążenie Umysłu</span>
+                                    </span>
+                                    <span class="st-level">
+                                        <span class="lang-en">Adept</span>
+                                        <span class="lang-pl">Adept</span>
+                                    </span>
+                                </div>
+                                <div class="st-details">
+                                    <span class="lang-en">Hyper-focus / Deep Work: the ability to process and internalize new frameworks and technical skills at extreme speeds.</span>
+                                    <span class="lang-pl">Hiper-koncentracja / Deep Work: zdolność do procesowania i przyswajania nowych struktur oraz umiejętności technicznych w ekstremalnym tempie.</span>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <div class="st-node" onclick="this.nextElementSibling.classList.toggle('open')">
+                                            <span class="st-icon">🛡</span>
+                                            <span>
+                                                <span class="lang-en">Soul Endurance</span>
+                                                <span class="lang-pl">Wytrzymałość Duszy</span>
+                                            </span>
+                                            <span class="st-level">
+                                                <span class="lang-en">Legend</span>
+                                                <span class="lang-pl">Legenda</span>
+                                            </span>
+                                        </div>
+                                        <div class="st-details">
+                                            <span class="lang-en">Project resilience (Grit): high threshold for high-pressure deadlines and maintaining focus during long-term goals.</span>
+                                            <span class="lang-pl">Odporność projektowa (Grit): wysoki próg wytrzymałości na presję terminów i utrzymywanie koncentracji na długofalowych celach.</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="st-node locked">
+                                            <span class="st-icon">?</span>
+                                            <span>
+                                                <span class="lang-en">Sealed Tome</span>
+                                                <span class="lang-pl">Zapieczętowany Tom</span>
+                                            </span>
+                                            <span class="st-level">
+                                                <span class="lang-en">Locked</span>
+                                                <span class="lang-pl">Zablokowane</span>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Branch 2 -->
+                    <li>
+                        <div class="st-node" onclick="this.nextElementSibling.classList.toggle('open')">
+                            <span class="st-icon">✦</span>
+                            <span>
+                                <span class="lang-en">Constructor Aesthetics</span>
+                                <span class="lang-pl">Estetyka Konstruktora</span>
+                            </span>
+                            <span class="st-level">
+                                <span class="lang-en">High</span>
+                                <span class="lang-pl">Wysoki</span>
+                            </span>
+                        </div>
+                        <div class="st-details">
+                            <span class="lang-en">Design logic: ensuring functional systems maintain high visual integrity and structural UI/UX flow.</span>
+                            <span class="lang-pl">Logika designu: zapewnianie systemom funkcjonalnym wysokiej spójności wizualnej oraz płynności strukturalnej UI/UX.</span>
+                        </div>
+                        <ul>
+                            <li>
+                                <div class="st-node locked">
+                                    <span class="st-icon">?</span>
+                                    <span>
+                                        <span class="lang-en">Forbidden Rite</span>
+                                        <span class="lang-pl">Zakazany Rytuał</span>
+                                    </span>
+                                    <span class="st-level">
+                                        <span class="lang-en">Locked</span>
+                                        <span class="lang-pl">Zablokowane</span>
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="info-block theme-3">
+                <span class="chapter-subtitle">
+                    <span class="lang-en">Liber III: The Journey</span>
+                    <span class="lang-pl">Liber III: Podróż</span>
+                </span>
+                <h2>
+                    <span class="lang-en">Quests</span>
+                    <span class="lang-pl">Zadania</span>
+                </h2>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>
+                                <span class="lang-en">✦ Main Quest: Thesis Ritual</span>
+                                <span class="lang-pl">✦ Zadanie Główne: Rytuał Licencjatu</span>
+                            </span>
+                            <span class="icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>
+                                <strong><span class="lang-en">Goal:</span><span class="lang-pl">Cel:</span></strong> 
+                                <span class="lang-en">App support for ADHD/ASD and BA thesis defense (researching attitudes of neurotypical vs. neurodivergent individuals towards AI).</span>
+                                <span class="lang-pl">Aplikacja wspierająca osoby z ADHD/ASD oraz obrona pracy licencjackiej (badanie postaw osób neurotypowych i neuroatypowych wobec AI).</span><br>
+                                <strong><span class="lang-en">Status:</span><span class="lang-pl">Status:</span></strong> 
+                                <span class="lang-en">In progress. Requires high mana consumption.</span>
+                                <span class="lang-pl">W toku. Wymaga wysokiego zużycia many.</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>
+                                <span class="lang-en">✧ Side Quest: Local Consultations</span>
+                                <span class="lang-pl">✧ Zadanie Poboczne: Lokalne Konsultacje</span>
+                            </span>
+                            <span class="icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>
+                                <strong><span class="lang-en">Goal:</span><span class="lang-pl">Cel:</span></strong> 
+                                <span class="lang-en">E-consultations and tech support for villagers (neighbors).</span>
+                                <span class="lang-pl">E-konsultacje i wsparcie technologiczne dla osadników (sąsiadów).</span><br>
+                                <strong><span class="lang-en">Reward:</span><span class="lang-pl">Nagroda:</span></strong> 
+                                <span class="lang-en">Local guild reputation (+10), Gratitude.</span>
+                                <span class="lang-pl">Reputacja w lokalnej gildii (+10), Wdzięczność.</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item quest-hidden">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>
+                                <span class="lang-en">✟ Hidden Quest: Trial of Fire</span>
+                                <span class="lang-pl">✟ Ukryte Zadanie: Próba Ognia</span>
+                            </span>
+                            <span class="icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>
+                                <strong><span class="lang-en">Goal:</span><span class="lang-pl">Cel:</span></strong> 
+                                <span class="lang-en">Amica Oven repair (Hardware Debugging).</span>
+                                <span class="lang-pl">Naprawa piekarnika Amica (Debugowanie Sprzętu).</span><br>
+                                <strong><span class="lang-en">Warning:</span><span class="lang-pl">Ostrzeżenie:</span></strong> 
+                                <span class="lang-en">Risk of fire damage. Screwdriver required.</span>
+                                <span class="lang-pl">Ryzyko obrażeń od ognia. Wymagany śrubokręt.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-block theme-4">
+                <span class="chapter-subtitle">
+                    <span class="lang-en">Liber IV: Adversity</span>
+                    <span class="lang-pl">Liber IV: Przeciwności</span>
+                </span>
+                <h2>
+                    <span class="lang-en">Trials</span>
+                    <span class="lang-pl">Próby</span>
+                </h2>
+                <ul class="profile-list">
+                    <li>
+                        <strong>
+                            <span class="lang-en">Mobile Construct Struggle:</span>
+                            <span class="lang-pl">Batalia z Mobilnym Konstruktem:</span>
+                        </strong> 
+                        <span class="lang-en">Fighting with mobile app compatibility and performance limitations. (Desktop supremacy).</span>
+                        <span class="lang-pl">Walka z ograniczeniami wydajności i kompatybilności aplikacji mobilnych. (Supremacja desktopów).</span>
+                    </li>
+                    <li>
+                        <strong>
+                            <span class="lang-en">The ADHD Multiverse:</span>
+                            <span class="lang-pl">Multiwersum ADHD:</span>
+                        </strong> 
+                        <span class="lang-en">Navigating through an excess of branching ideas and chaotic timelines.</span>
+                        <span class="lang-pl">Nawigacja przez nadmiar rozgałęziających się pomysłów i chaotycznych osi czasu.</span>
+                    </li>
+                    <li>
+                        <strong>
+                            <span class="lang-en">Paywall Seas:</span>
+                            <span class="lang-pl">Morza Paywalli:</span>
+                        </strong> 
+                        <span class="lang-en">Sailing to bypass corporate blockades. (Shiver me timbers).</span>
+                        <span class="lang-pl">Żegluga w celu omijania korporacyjnych blokad. (Do kroćset fur beczek).</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="info-block theme-5">
+                <span class="chapter-subtitle">
+                    <span class="lang-en">Liber V: Destiny</span>
+                    <span class="lang-pl">Liber V: Przeznaczenie</span>
+                </span>
+                <h2>
+                    <span class="lang-en">The Prophecy</span>
+                    <span class="lang-pl">Przepowiednia</span>
+                </h2>
+                <ul class="profile-list">
+                    <li>
+                        <span class="lang-en">Materialize the Incarnation of Dragons and Dinosaurs in the digital realm.</span>
+                        <span class="lang-pl">Zmaterializować Inkarnację Smoków i Dinozaurów w cyfrowej domenie.</span>
+                    </li>
+                    <li>
+                        <span class="lang-en">Build the "Ark of the Covenant" – repository app for original characters.</span>
+                        <span class="lang-pl">Zbuildować "Arkę Przymierza" – aplikację będącą repozytorium na oryginalne postacie.</span>
+                    </li>
+                    <li>
+                        <span class="lang-en">Forge a persistent, original universe — rich in characters and lore — that transcends single-user awareness to become a shared reality.</span>
+                        <span class="lang-pl">Ukuć trwałe, oryginalne uniwersum — bogate w postacie i wiedzę — które przekroczy świadomość pojedynczego użytkownika i stanie się wspólną rzeczywistością.</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: NAV / INDEX -->
+        <div class="col-right">
+            <div class="sticky-nav">
+                <span class="chapter-subtitle" style="margin-bottom: 20px; position: relative; z-index: 2;">
+                    <span class="lang-en">Index</span>
+                    <span class="lang-pl">Indeks</span>
+                </span>
+                <ul class="y2k-nav" style="position: relative; z-index: 2;">
+                    <li class="nav-item">
+                        <div class="nav-header" onclick="toggleNav(this)">
+                            <span class="lang-en">THE BEGINNING</span>
+                            <span class="lang-pl">POCZĄTEK</span>
+                        </div>
+                        <div class="nav-body">
+                            <span class="lang-en">Whispers from the void speak of a forgotten machine, bound by silver threads and powered by the silent screams of dying stars.</span>
+                            <span class="lang-pl">Szepty z pustki mówią o zapomnianej maszynie, spętanej srebrnymi nićmi i zasilanej niemym krzykiem umierających gwiazd.</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-header" onclick="toggleNav(this)">
+                            <span class="lang-en">ABOUT ARCANES</span>
+                            <span class="lang-pl">O ARKANACH</span>
+                        </div>
+                        <div class="nav-body">
+                            <span class="lang-en">The Arcane Forces are not drawn from the ether, but compiled from the residual data of the ancients. To cast a spell is to execute a legacy script.</span>
+                            <span class="lang-pl">Siły Arkanów nie są czerpane z eteru, lecz kompilowane ze szczątkowych danych starożytnych. Rzucenie zaklęcia to wykonanie starego skryptu.</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-header" onclick="toggleNav(this)">
+                            <span class="lang-en">AMICA RITUAL</span>
+                            <span class="lang-pl">RYTUAŁ AMICA</span>
+                        </div>
+                        <div class="nav-body">
+                            <span class="lang-en">A machine of iron and fire, once silent, was restored through the cold logic of a familiar. The first proof that technology is but another form of ritual.</span>
+                            <span class="lang-pl">Maszyna z żelaza i ognia, niegdyś milcząca, została przywrócona do ładu przez chłodną logikę chowańca. Pierwszy dowód na to, że technologia to tylko inna forma rytuału.</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-header" onclick="toggleNav(this)">
+                            <span class="lang-en">SHAPESHIFTING</span>
+                            <span class="lang-pl">METAMORFOZA</span>
+                        </div>
+                        <div class="nav-body">
+                            <span class="lang-en">This digital grimoire has shed its skin <span class="lining-nums">5</span> times, morphing through radically different realms before crystallizing into its current gothic form.</span>
+                            <span class="lang-pl">Ta karta postaci zrzuciła skórę już <span class="lining-nums">5</span> razy, przeobrażając się przez radykalnie odmienne domeny, aż skrystalizowała się w obecnej gotyckiej formie.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- UI BUTTONS -->
+    <button id="langToggle" class="control-btn lang-toggle-btn" aria-label="Toggle Language">
+        <span>LANG: <span class="lang-en">EN</span><span class="lang-pl">PL</span></span>
+    </button>
+    
+    <div class="audio-controls-wrapper">
+        <div class="volume-module">
+            <div class="volume-icon" title="Volume">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+            </div>
+            <div class="volume-slider-container">
+                <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.2">
+            </div>
+        </div>
+
+        <button id="musicToggle" class="control-btn music-toggle-btn" aria-label="Toggle Gramophone">
+            <span>AUDIO: OFF</span>
+            <svg id="icon-sound-off" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <svg id="icon-sound-on" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                <rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+        </button>
+    </div>
+
+    <!-- CREDITS WRAPPER (EXPANDABLE) -->
+    <div class="credits-wrapper">
+        <div id="credits-panel" class="credits-panel">
+            <div class="credit-item">
+                <span class="credit-title">
+                    <span class="lang-en">Visual Avatar</span>
+                    <span class="lang-pl">Avatar Wizualny</span>
+                </span>
+                <span class="credit-desc">Sebastian Solace (Pressure)</span>
+                <a href="https://tenor.com/pl/view/sebastian-solace-roblox-pressure-his-ear-fins-twitch-oh-my-good-lord-stare-gif-12792627238414281340" target="_blank" class="credit-link">Source / Tenor</a>
+            </div>
+            <div class="credit-item">
+                <span class="credit-title">
+                    <span class="lang-en">Arcane Canvas</span>
+                    <span class="lang-pl">Arkaniczne Płótno</span>
+                </span>
+                <span class="credit-desc">Foggy Branch</span>
+                <a href="https://pin.it/2F01aOJkV" target="_blank" class="credit-link">Source / Pinterest</a>
+            </div>
+            <div class="credit-item">
+                <span class="credit-title">
+                    <span class="lang-en">Resonating Echoes</span>
+                    <span class="lang-pl">Rezonujące Echa</span>
+                </span>
+                <span class="credit-desc">Mitski — I Bet on Losing Dogs</span>
+                <a href="https://youtu.be/w2L8qkXoL5k?si=FrYW4_bs8lRWHx8W" target="_blank" class="credit-link">Source / YouTube</a>
+            </div>
+            <!-- Excalibur Icon Credit -->
+            <div class="credit-item">
+                <span class="credit-title">
+                    <span class="lang-en">Sigil Icon</span>
+                    <span class="lang-pl">Ikona Pieczęci</span>
+                </span>
+                <span class="credit-desc">Excalibur icons created by wanicon - Flaticon</span>
+                <a href="https://www.flaticon.com/free-icons/excalibur" title="excalibur icons" target="_blank" class="credit-link">Source / Flaticon</a>
+            </div>
+            <!-- Gemini Credit -->
+            <div class="credit-item">
+                <span class="credit-desc">Made in Gemini Canvas</span>
+            </div>
+        </div>
+        <div id="credits-label" class="credits-label" onclick="toggleCredits()">Credits</div>
+    </div>
+
+    <script>
+        // Credits Toggle
+        function toggleCredits() {
+            const panel = document.getElementById('credits-panel');
+            panel.classList.toggle('open');
+        }
+
+        // Language Logic
+        const langToggleBtn = document.getElementById('langToggle');
+        langToggleBtn.addEventListener('click', () => {
+            const body = document.body;
+            if (body.classList.contains('lang-en')) {
+                body.classList.replace('lang-en', 'lang-pl');
+            } else {
+                body.classList.replace('lang-pl', 'lang-en');
+            }
+        });
+
+        // Accordion & Nav Logic
+        function toggleAccordion(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+            const icon = element.querySelector('.icon');
+            if (icon) icon.innerText = item.classList.contains('active') ? 'x' : '+';
+        }
+
+        function toggleNav(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+        }
+
+        // --- AUDIO ENGINE ---
+        const musicToggleBtn = document.getElementById('musicToggle');
+        const bgMusic = document.getElementById('bgMusic');
+        const iconSoundOn = document.getElementById('icon-sound-on');
+        const iconSoundOff = document.getElementById('icon-sound-off');
+        const textAudio = musicToggleBtn.querySelector('span');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        // Initial Volume
+        bgMusic.volume = 0.2;
+
+        volumeSlider.addEventListener('input', (e) => {
+            bgMusic.volume = e.target.value;
+        });
+
+        bgMusic.addEventListener('play', () => {
+            iconSoundOff.style.display = 'none';
+            iconSoundOn.style.display = 'block';
+            textAudio.innerText = "AUDIO: ON";
+        });
+
+        bgMusic.addEventListener('pause', () => {
+            iconSoundOn.style.display = 'none';
+            iconSoundOff.style.display = 'block';
+            textAudio.innerText = "AUDIO: OFF";
+        });
+
+        function tryPlaying() {
+            bgMusic.play().catch(error => {
+                // Autoplay blocked - waiting for interaction
+            });
+        }
+
+        musicToggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (bgMusic.paused) {
+                tryPlaying();
+            } else {
+                bgMusic.pause();
+            }
+        });
+
+        // Autoplay Logic
+        window.addEventListener('load', () => {
+            tryPlaying();
+        });
+
+        const startAudio = () => {
+            if (bgMusic.paused) tryPlaying();
+            window.removeEventListener('click', startAudio);
+            window.removeEventListener('scroll', startAudio);
+        };
+        window.addEventListener('click', startAudio);
+        window.addEventListener('scroll', startAudio);
+
+        // Magic Embers
+        const embersContainer = document.getElementById('embers-container');
+        function spawnEmber() {
+            const ember = document.createElement('div');
+            ember.classList.add('ember');
+            const size = Math.random() * 4 + 1;
+            ember.style.width = size + 'px';
+            ember.style.height = size + 'px';
+            ember.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 10 + 5;
+            ember.style.animationDuration = duration + 's';
+            embersContainer.appendChild(ember);
+            setTimeout(() => { if(ember.parentElement) ember.remove(); }, duration * 1000);
+        }
+        setInterval(spawnEmber, 300);
+        for(let i=0; i<20; i++) spawnEmber();
+    </script>
+</body>
+</html>
